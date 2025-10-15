@@ -7,21 +7,49 @@
 #include <stdlib.h>
 
 int main(void) {
-    FILE *fp;
-    char filename[100] = "data.txt";
-    char line[256];
+  FILE *fp;
+  char filename[100] = "data.txt";
+  char line[256];
 
-    // TODO: 1. Open file for writing (mode = "w")
-    // TODO: 2. Check if file opened successfully
-    // TODO: 3. Write 2–3 lines of text to the file using fprintf()
-    // TODO: 4. Close the file
+  fp = fopen(filename, "w");
 
-    // TODO: 5. Open file again for reading (mode = "r")
-    // TODO: 6. Use fgets() in a loop to read and print each line to the console
-    // TODO: 7. Close the file
+  if (fp == NULL) {
+    perror("Error opening file");
+    return 1;
+  }
 
-    // BONUS: ask user for filename instead of using default "data.txt"
-    // BONUS: count number of lines read
+  fprintf(fp, "Hello, World!\n");
+  fprintf(fp, "This is a test file.\n");
+  fprintf(fp, "Goodbye, World!\n");
+  fclose(fp);
 
-    return 0;
+  fp = fopen(filename, "r");
+
+  if (fp == NULL) {
+    perror("Error opening file");
+    return 1;
+  }
+  while (fgets(line, sizeof(line), fp) != NULL) {
+    printf("%s", line);
+  }
+  fclose(fp);
+
+  printf("Enter filename: ");
+  fgets(filename, sizeof(filename), stdin);
+  filename[strcspn(filename, "\n")] = 0;
+
+  int line_count = 0;
+  fp = fopen(filename, "r");
+  if (fp == NULL) {
+    perror("Error opening file");
+    return 1;
+  }
+  while (fgets(line, sizeof(line), fp) != NULL) {
+    printf("%s", line);
+    line_count++;
+  }
+  fclose(fp);
+  printf("Total lines read: %d\n", line_count);
+
+  return 0;
 }
